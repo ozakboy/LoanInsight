@@ -75,10 +75,13 @@ const activeChart = ref<'A' | 'B'>('A')
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 md:px-6 py-10">
-    <div class="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8">
-      <!-- 主內容 -->
-      <div class="space-y-8 min-w-0">
+  <main class="py-10">
+    <div class="flex justify-center gap-6">
+      <!-- 左側留白：與右側廣告對稱，維持主內容置中（僅超寬螢幕顯示） -->
+      <div class="hidden min-[1800px]:block w-[300px] shrink-0" aria-hidden="true"></div>
+
+      <!-- 主內容（永遠使用完整寬度，不被廣告壓縮） -->
+      <div class="w-full max-w-6xl min-w-0 px-4 md:px-6 space-y-8">
         <!-- 個人財務狀況 -->
         <section class="card p-6">
           <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2 mb-4">
@@ -176,9 +179,11 @@ const activeChart = ref<'A' | 'B'>('A')
         </p>
       </div>
 
-      <!-- 桌面版右側黏性摩天大樓廣告 -->
-      <div class="hidden lg:block">
-        <AdSlot format="skyscraper" :sticky="true" label="贊助廣告" />
+      <!-- 右側留白區：黏性摩天大樓廣告（僅超寬螢幕，不佔用主內容寬度） -->
+      <div class="hidden min-[1800px]:block w-[300px] shrink-0">
+        <div class="sticky top-6">
+          <AdSlot format="skyscraper" label="贊助廣告" />
+        </div>
       </div>
     </div>
   </main>
