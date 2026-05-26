@@ -10,7 +10,9 @@ export interface LoanInput {
   years: number
   /** 寬限期（月）— 此期間只繳息不還本 */
   gracePeriodMonths: number
-  /** 第一階段月數（如前 24 個月） */
+  /** 利率類型：'single' 一段式（全期單一利率）、'dual' 兩段式（階梯式） */
+  rateType: 'single' | 'dual'
+  /** 第一階段月數（如前 24 個月）— 僅兩段式適用 */
   stage1Months: number
   /** 第一階段年利率（%） */
   stage1Rate: number

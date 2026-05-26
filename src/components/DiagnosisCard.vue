@@ -40,9 +40,7 @@ function dsrText(d: DsrDiagnosis): string {
   return formatPercent(d.ratio * 100, 1)
 }
 
-const hasTwoStages = computed(
-  () => r.value.stage2Payment > 0 && r.value.stage1Payment !== r.value.stage2Payment,
-)
+const hasTwoStages = computed(() => r.value.schedule.some((row) => row.stage === 2))
 </script>
 
 <template>
@@ -79,13 +77,19 @@ const hasTwoStages = computed(
         <span class="text-slate-500">開辦費用</span>
         <span class="font-bold text-slate-700">{{ formatCurrency(r.originationFee) }}</span>
       </div>
-      <div class="flex justify-between border-b border-slate-100 py-2">
-        <span class="text-slate-500">第一階段月付</span>
+      <template v-if="hasTwoStages">
+        <div class="flex justify-between border-b border-slate-100 py-2">
+          <span class="text-slate-500">第一階段月付</span>
+          <span class="font-bold text-slate-700">{{ formatCurrency(r.stage1Payment) }}</span>
+        </div>
+        <div class="flex justify-between border-b border-slate-100 py-2">
+          <span class="text-slate-500">第二階段月付</span>
+          <span class="font-bold text-slate-700">{{ formatCurrency(r.stage2Payment) }}</span>
+        </div>
+      </template>
+      <div v-else class="flex justify-between border-b border-slate-100 py-2 col-span-2">
+        <span class="text-slate-500">每月還款金額</span>
         <span class="font-bold text-slate-700">{{ formatCurrency(r.stage1Payment) }}</span>
-      </div>
-      <div class="flex justify-between border-b border-slate-100 py-2">
-        <span class="text-slate-500">第二階段月付</span>
-        <span class="font-bold text-slate-700">{{ formatCurrency(r.stage2Payment) }}</span>
       </div>
       <div class="flex justify-between py-2 col-span-2">
         <span class="text-slate-500">總成本（本金 + 利息 + 開辦費）</span>
@@ -95,7 +99,9 @@ const hasTwoStages = computed(
 
     <!-- 分階段 DSR 診斷 -->
     <div class="space-y-3">
-      <p class="text-sm font-bold text-slate-700">分階段收支動態診斷（DSR）</p>
+      <p class="text-sm font-bold text-slate-700">
+        {{ hasTwoStages ? '分階段' : '' }}收支動態診斷（DSR）
+      </p>
       <p class="text-xs text-slate-400 -mt-1.5">
         可支配收入 NT$ {{ formatCurrency(diagnosis.disposableIncome) }}（月收入 − 既有支出）
       </p>
@@ -109,7 +115,8 @@ const hasTwoStages = computed(
       >
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-slate-600">
-            第{{ idx === 0 ? '一' : '二' }}階段 月付 NT$ {{ formatCurrency(d.payment) }}
+            {{ hasTwoStages ? `第${idx === 0 ? '一' : '二'}階段 ` : '' }}月付 NT$
+            {{ formatCurrency(d.payment) }}
           </span>
           <span
             class="inline-flex items-center gap-1.5 text-xs font-extrabold"

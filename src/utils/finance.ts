@@ -38,9 +38,13 @@ export function buildSchedule(input: LoanInput): ScheduleRow[] {
   const principal = input.amountWan * WAN
   const totalMonths = Math.round(input.years * 12)
   const grace = Math.min(Math.max(0, Math.round(input.gracePeriodMonths)), totalMonths)
-  const stage1Months = Math.min(Math.max(0, Math.round(input.stage1Months)), totalMonths)
+  const isSingle = input.rateType === 'single'
+  // 一段式：全期套用單一利率（第一階段涵蓋整個年限，第二階段利率沿用第一階段）
+  const stage1Months = isSingle
+    ? totalMonths
+    : Math.min(Math.max(0, Math.round(input.stage1Months)), totalMonths)
   const i1 = input.stage1Rate / 100 / 12
-  const i2 = input.stage2Rate / 100 / 12
+  const i2 = isSingle ? i1 : input.stage2Rate / 100 / 12
 
   const rows: ScheduleRow[] = []
   let balance = principal

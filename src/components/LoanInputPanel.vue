@@ -64,34 +64,68 @@ const accentText: Record<string, string> = {
       hint="此期間僅繳利息、不償還本金"
     />
 
-    <div class="grid grid-cols-2 gap-4 pt-1">
-      <RangeInput
-        v-model="input.stage1Months"
-        label="第一階段月數"
-        :min="0"
-        :max="input.years * 12"
-        :step="1"
-        unit="月"
-      />
-      <RangeInput
-        v-model="input.stage1Rate"
-        label="第一階段年利率"
-        :min="0"
-        :max="10"
-        :step="0.01"
-        unit="%"
-      />
+    <!-- 利率類型選擇 -->
+    <div>
+      <label class="field-label">利率類型</label>
+      <div class="relative">
+        <select v-model="input.rateType" class="field-input appearance-none pr-10 cursor-pointer">
+          <option value="single">一段式利率（全期單一固定利率）</option>
+          <option value="dual">兩段式利率（階梯式，前後分段）</option>
+        </select>
+        <svg
+          class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
     </div>
 
+    <!-- 一段式：單一年利率 -->
     <RangeInput
-      v-model="input.stage2Rate"
-      label="第二階段年利率（調升後）"
+      v-if="input.rateType === 'single'"
+      v-model="input.stage1Rate"
+      label="年利率"
       :min="0"
       :max="10"
       :step="0.01"
       unit="%"
-      hint="第一階段結束後適用至合約結束"
+      hint="全期套用此單一利率"
     />
+
+    <!-- 兩段式：分段設定 -->
+    <template v-else>
+      <div class="grid grid-cols-2 gap-4">
+        <RangeInput
+          v-model="input.stage1Months"
+          label="第一階段月數"
+          :min="0"
+          :max="input.years * 12"
+          :step="1"
+          unit="月"
+        />
+        <RangeInput
+          v-model="input.stage1Rate"
+          label="第一階段年利率"
+          :min="0"
+          :max="10"
+          :step="0.01"
+          unit="%"
+        />
+      </div>
+
+      <RangeInput
+        v-model="input.stage2Rate"
+        label="第二階段年利率（調升後）"
+        :min="0"
+        :max="10"
+        :step="0.01"
+        unit="%"
+        hint="第一階段結束後適用至合約結束"
+      />
+    </template>
 
     <div>
       <label class="field-label">開辦費用（一次性）</label>
