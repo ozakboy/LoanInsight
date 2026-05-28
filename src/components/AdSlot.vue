@@ -1,15 +1,34 @@
 <script setup lang="ts">
-// 非侵入式廣告佔位元件。
-// 上線時：於 index.html 載入 AdSense script，並把下方容器替換為實際的
-// <ins class="adsbygoogle" ...> 標籤。預設僅顯示佔位框，周邊保留安全防護區避免誤觸。
-// 註：摩天大樓 (skyscraper) 的版面定位由父層負責（置於外側留白區），本元件僅繪製廣告框。
-withDefaults(
-  defineProps<{
-    label?: string
-    format?: 'skyscraper' | 'banner'
-  }>(),
-  { label: '贊助廣告', format: 'banner' },
+import { computed, onMounted } from 'vue'
+import { adsConfig, type AdFormat } from '../config/ads'
+
+declare global {
+  interface Window {
+    adsbygoogle: Record<string, unknown>[]
+  }
+}
+
+const props = withDefaults(defineProps<{ format?: AdFormat }>(), {
+  format: 'banner',
+})
+
+const slot = computed(() => adsConfig.slots[props.format])
+const insStyle = computed(() =>
+  props.format === 'skyscraper'
+    ? 'display:block;width:300px;height:600px'
+    : 'display:block;min-height:100px',
 )
+
+onMounted(() => {
+  if (typeof window === 'undefined') return
+  try {
+    window.adsbygoogle = window.adsbygoogle || []
+    window.adsbygoogle.push({})
+  } catch (e) {
+    // 廣告載入失敗（擋廣告外掛、未通過審核、無填充等）— 靜默忽略
+    console.warn('[AdSense] push failed', e)
+  }
+})
 </script>
 
 <template>
@@ -17,16 +36,13 @@ withDefaults(
     :class="format === 'banner' ? 'w-full px-4 py-2' : ''"
     aria-label="advertisement"
   >
-    <div
-      class="flex items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-100/70 text-slate-400"
-      :class="format === 'skyscraper' ? 'h-[600px] w-[300px]' : 'min-h-[100px] w-full'"
-    >
-      <div class="text-center px-4">
-        <p class="text-xs font-bold uppercase tracking-widest">{{ label }}</p>
-        <p class="text-[11px] mt-1 text-slate-400/80">
-          {{ format === 'skyscraper' ? '300 × 600' : 'Responsive Banner' }}
-        </p>
-      </div>
-    </div>
+    <ins
+      class="adsbygoogle"
+      :style="insStyle"
+      :data-ad-client="adsConfig.publisherId"
+      :data-ad-slot="slot"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
   </aside>
 </template>

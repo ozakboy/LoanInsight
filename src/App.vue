@@ -133,7 +133,7 @@ const activeChart = ref<'A' | 'B'>('A')
         </div>
 
         <!-- 報表交界橫幅廣告 -->
-        <AdSlot format="banner" label="贊助廣告" />
+        <AdSlot format="banner" />
 
         <!-- 攤還曲線（可切換方案） -->
         <section class="space-y-3">
@@ -184,7 +184,7 @@ const activeChart = ref<'A' | 'B'>('A')
       <!-- 右側留白區：黏性摩天大樓廣告（僅超寬螢幕，不佔用主內容寬度） -->
       <div class="hidden min-[1800px]:block w-[300px] shrink-0">
         <div class="sticky top-6">
-          <AdSlot format="skyscraper" label="贊助廣告" />
+          <AdSlot format="skyscraper" />
         </div>
       </div>
     </div>

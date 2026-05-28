@@ -1,4 +1,1 @@
-# Google AdSense 授權檔（ads.txt）
-# 上線前：把下方 pub-0000000000000000 換成你 AdSense 後台的發布商 ID，並移除此註解。
-# 格式：<advertising-system>, <publisher-id>, <relationship>, <certification-id>
-google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+google.com, pub-5488118663607574, DIRECT, f08c47fec0942fa0
