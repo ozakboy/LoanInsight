@@ -13,7 +13,7 @@ useSeoMeta({
   ogUrl: 'https://loaninsight.ozakboy.life/refinance',
 })
 
-const input = reactive<RefinanceInput>({
+const DEFAULTS: RefinanceInput = {
   originalAmountWan: 800,
   originalYears: 30,
   currentRate: 2.5,
@@ -22,9 +22,19 @@ const input = reactive<RefinanceInput>({
   newYears: 28,
   refinanceFees: 40000,
   penalty: 0,
-})
+}
+
+const input = reactive<RefinanceInput>({ ...DEFAULTS })
 
 const result = computed(() => calculateRefinance(input))
+
+// URL 分享 + localStorage 自動儲存
+const { copyShareLink, clearPersisted } = useStateSync('loaninsight-refinance', { input })
+
+function resetAll() {
+  Object.assign(input, DEFAULTS)
+  clearPersisted()
+}
 
 const verdictStyles = computed(() => {
   if (result.value.netSaving > 200000)
@@ -67,6 +77,13 @@ const verdictStyles = computed(() => {
       把<strong>代書費、塗銷費、違約金</strong>都算進去，告訴你轉貸後**真實**省下多少利息、
       多少個月後回本。所有計算在你瀏覽器端完成，不上傳任何資料。
     </p>
+    <div class="mt-5 pt-4 border-t border-slate-100">
+      <ShareActions
+        :share="copyShareLink"
+        :reset="resetAll"
+        hint="輸入會自動存在本機 — 下次回來自動恢復"
+      />
+    </div>
   </section>
 
   <!-- 輸入區 -->

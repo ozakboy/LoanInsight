@@ -13,7 +13,7 @@ useSeoMeta({
   ogUrl: 'https://loaninsight.ozakboy.life/buy-vs-rent',
 })
 
-const input = reactive<BuyVsRentInput>({
+const DEFAULTS: BuyVsRentInput = {
   housePriceWan: 1500,
   downPaymentPercent: 20,
   loanRate: 2.1,
@@ -25,9 +25,19 @@ const input = reactive<BuyVsRentInput>({
   housePriceGrowth: 2,
   investmentReturn: 5,
   holdYears: 10,
-})
+}
+
+const input = reactive<BuyVsRentInput>({ ...DEFAULTS })
 
 const result = computed(() => calculateBuyVsRent(input))
+
+// URL 分享 + localStorage 自動儲存
+const { copyShareLink, clearPersisted } = useStateSync('loaninsight-buy-vs-rent', { input })
+
+function resetAll() {
+  Object.assign(input, DEFAULTS)
+  clearPersisted()
+}
 </script>
 
 <template>
@@ -47,6 +57,13 @@ const result = computed(() => calculateBuyVsRent(input))
       把<strong>房價漲幅、投資機會成本、稅費、租金漲幅</strong>全部考慮進來，
       告訴你 N 年後買房與租屋的「淨成本」差距、終局資產淨值。所有計算皆於瀏覽器端完成。
     </p>
+    <div class="mt-5 pt-4 border-t border-slate-100">
+      <ShareActions
+        :share="copyShareLink"
+        :reset="resetAll"
+        hint="輸入會自動存在本機 — 下次回來自動恢復"
+      />
+    </div>
   </section>
 
   <!-- 輸入面板 -->

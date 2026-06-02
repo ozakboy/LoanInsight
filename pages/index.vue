@@ -29,13 +29,12 @@ function formatDate(iso?: string): string {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`
 }
 
-// 個人財務狀況（雙方案共用，用於 DSR）
-const profile = reactive<FinanceProfile>({
+// ---- 預設值（reset 也用同一份）----
+const DEFAULT_PROFILE: FinanceProfile = {
   monthlyIncome: 80000,
   existingExpenses: 25000,
-})
-
-const defaultA: LoanInput = {
+}
+const DEFAULT_A: LoanInput = {
   name: '銀行 A',
   amountWan: 800,
   years: 30,
@@ -47,8 +46,7 @@ const defaultA: LoanInput = {
   originationFee: 30000,
   extraMonthlyPrincipal: 0,
 }
-
-const defaultB: LoanInput = {
+const DEFAULT_B: LoanInput = {
   name: '銀行 B',
   amountWan: 800,
   years: 30,
@@ -61,13 +59,30 @@ const defaultB: LoanInput = {
   extraMonthlyPrincipal: 0,
 }
 
-const { input: inputA, result: resultA } = useLoanScenario(defaultA)
-const { input: inputB, result: resultB } = useLoanScenario(defaultB)
+// 個人財務狀況（雙方案共用，用於 DSR）
+const profile = reactive<FinanceProfile>({ ...DEFAULT_PROFILE })
+
+const { input: inputA, result: resultA } = useLoanScenario({ ...DEFAULT_A })
+const { input: inputB, result: resultB } = useLoanScenario({ ...DEFAULT_B })
 
 const diagA = useDiagnosis(resultA, profile)
 const diagB = useDiagnosis(resultB, profile)
 
 const activeChart = ref<'A' | 'B'>('A')
+
+// URL hash 分享連結 + localStorage 自動儲存
+const { copyShareLink, clearPersisted } = useStateSync('loaninsight-home', {
+  profile,
+  inputA,
+  inputB,
+})
+
+function resetAll() {
+  Object.assign(profile, DEFAULT_PROFILE)
+  Object.assign(inputA, DEFAULT_A)
+  Object.assign(inputB, DEFAULT_B)
+  clearPersisted()
+}
 </script>
 
 <template>
@@ -90,6 +105,13 @@ const activeChart = ref<'A' | 'B'>('A')
       支援兩段式利率、寬限期、雙銀行同屏 PK。讓隱藏的貸款成本無所遁形，
       <strong class="text-slate-900">所有計算皆於瀏覽器端完成、不蒐集任何個人財務資料</strong>。
     </p>
+    <div class="mt-5 pt-4 border-t border-slate-100">
+      <ShareActions
+        :share="copyShareLink"
+        :reset="resetAll"
+        hint="輸入會自動存在本機 — 下次回來自動恢復"
+      />
+    </div>
   </section>
 
   <!-- 個人財務狀況 -->
