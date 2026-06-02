@@ -86,4 +86,4 @@ slug: grace-period
 
 ---
 
-延伸閱讀：[APR 是什麼？為何牌告利率不能信](/blog/apr-explained)、[首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)、[該買還是繼續租？](/blog/buy-or-rent-decision)
+延伸閱讀：[APR 是什麼？為何牌告利率不能信](/blog/apr-explained)、[首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)、[該買還是繼續租？](/blog/buy-or-rent-decision)、[房貸轉貸划不划算？](/blog/refinance-worth-it)

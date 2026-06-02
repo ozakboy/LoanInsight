@@ -128,4 +128,4 @@ slug: first-buyer-pitfalls
 
 別讓銀行業務員幾句「現在輕鬆一點」的話術，換來你未來 30 年的辛苦。
 
-延伸閱讀：[APR 完整解析](/blog/apr-explained)、[兩段式利率陷阱](/blog/two-stage-rate-trap)、[寬限期該不該用](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)
+延伸閱讀：[APR 完整解析](/blog/apr-explained)、[兩段式利率陷阱](/blog/two-stage-rate-trap)、[寬限期該不該用](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)、[房貸轉貸划不划算？](/blog/refinance-worth-it)

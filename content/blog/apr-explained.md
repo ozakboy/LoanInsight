@@ -86,4 +86,4 @@ slug: apr-explained
 
 下次銀行業務員跟你說「我們利率比較低喔」的時候，請反問一句：「**含開辦費的 APR 是多少？**」對方如果一臉茫然，那你就贏了——你比業務員還懂你的貸款成本。
 
-延伸閱讀：[首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)、[房貸寬限期該不該用？](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)
+延伸閱讀：[首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)、[房貸寬限期該不該用？](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)、[房貸轉貸划不划算？](/blog/refinance-worth-it)

@@ -145,3 +145,4 @@ $$300 \times (1.05)^{10} ≈ 489 \text{ 萬}$$
 - [房貸寬限期該不該用？](/blog/grace-period)
 - [兩段式利率的陷阱](/blog/two-stage-rate-trap)
 - [首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)
+- [房貸轉貸划不划算？](/blog/refinance-worth-it)
