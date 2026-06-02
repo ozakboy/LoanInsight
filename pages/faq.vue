@@ -55,6 +55,19 @@ const totalCount = faqGroups.reduce((sum, g) => sum + g.items.length, 0)
       從基礎概念到實際情境，把最常被問的房貸問題一次說清楚。
       <strong>點任一題即可展開答案</strong>；想搜尋特定關鍵字請用瀏覽器 Ctrl+F。
     </p>
+
+    <!-- 資料更新日 + 免責聲明 -->
+    <div
+      class="mt-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 rounded-xl bg-amber-50/70 border border-amber-200 px-4 py-3 text-xs text-amber-800/90 leading-relaxed"
+    >
+      <span class="inline-flex items-center gap-1.5 font-bold shrink-0">
+        📅 資料更新日：2026/06/03
+      </span>
+      <span class="text-amber-700/90">
+        本頁資訊僅供參考，**利率、額度、補貼期、稅務扣除額等隨政策變動**，正式申辦前請以
+        <strong>承貸銀行公告與政府機關（內政部、財政部、央行）最新規定為準</strong>。
+      </span>
+    </div>
   </section>
 
   <!-- 分類錨點導航 -->

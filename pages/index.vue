@@ -136,13 +136,16 @@ const activeChart = ref<'A' | 'B'>('A')
     </div>
   </section>
 
-  <!-- 雙方案輸入 + 診斷 -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="space-y-6">
+  <!-- 雙方案輸入 + 診斷
+       桌面 (lg+)：subgrid 讓兩家銀行的 LoanInputPanel 對齊、DiagnosisCard 也對齊，
+       即使 A=兩段式、B=一段式（高度不同）也不會跑位。
+       行動：維持「Input A → Result A → Input B → Result B」垂直堆疊順序。 -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_auto] gap-6">
+    <div class="space-y-6 lg:space-y-0 lg:grid lg:grid-rows-subgrid lg:row-span-2 lg:gap-6">
       <LoanInputPanel v-model="inputA" accent="blue" />
       <DiagnosisCard :diagnosis="diagA" :name="inputA.name" />
     </div>
-    <div class="space-y-6">
+    <div class="space-y-6 lg:space-y-0 lg:grid lg:grid-rows-subgrid lg:row-span-2 lg:gap-6">
       <LoanInputPanel v-model="inputB" accent="indigo" />
       <DiagnosisCard :diagnosis="diagB" :name="inputB.name" />
     </div>
