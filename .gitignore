@@ -428,7 +428,9 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# ---- Node / Vite (LoanInsight) ----
+# ---- Node / Vite / Nuxt (LoanInsight) ----
+# 'dist' (no slash) also catches the symlink Nuxt creates → .output/public
+dist
 dist/
 dist-ssr/
 .vite/
