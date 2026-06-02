@@ -100,4 +100,4 @@ slug: two-stage-rate-trap
 
 別讓「前兩年只要 1.55%」這種行銷話術迷惑你。**真正聰明的做法是算清楚整個 30 年的總成本**，再決定要不要簽。
 
-延伸閱讀：[APR 是什麼？為何牌告利率不能信](/blog/apr-explained)、[房貸寬限期該不該用？](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)、[房貸轉貸划不划算？](/blog/refinance-worth-it)
+延伸閱讀：[房貸利率怎麼算？](/blog/mortgage-rate-calculation)、[青安貸款 4.0 解析](/blog/youth-housing-loan)、[APR 是什麼？為何牌告利率不能信](/blog/apr-explained)、[房貸寬限期該不該用？](/blog/grace-period)、[該買還是繼續租？](/blog/buy-or-rent-decision)、[房貸轉貸划不划算？](/blog/refinance-worth-it)

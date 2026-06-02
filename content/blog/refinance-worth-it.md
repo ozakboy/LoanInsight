@@ -115,6 +115,8 @@ $$\text{損益平衡月數} = \frac{\text{前置成本}}{\text{每月省下的�
 
 延伸閱讀：
 - [APR 是什麼？為何牌告利率不能信](/blog/apr-explained)
+- [房貸利率怎麼算？](/blog/mortgage-rate-calculation)
+- [房貸手續費全清單](/blog/mortgage-fees-checklist)
 - [兩段式利率的陷阱](/blog/two-stage-rate-trap)
 - [房貸寬限期該不該用？](/blog/grace-period)
 - [首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)

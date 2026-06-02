@@ -26,6 +26,7 @@
           <NuxtLink to="/refinance" class="hover:text-white transition">轉貸</NuxtLink>
           <NuxtLink to="/buy-vs-rent" class="hover:text-white transition">買 vs 租</NuxtLink>
           <NuxtLink to="/blog" class="hover:text-white transition">文章</NuxtLink>
+          <NuxtLink to="/faq" class="hover:text-white transition">FAQ</NuxtLink>
         </nav>
       </div>
     </header>
@@ -68,6 +69,8 @@
           <NuxtLink to="/buy-vs-rent" class="hover:text-slate-300">買 vs 租</NuxtLink>
           ·
           <NuxtLink to="/blog" class="hover:text-slate-300">貸款知識</NuxtLink>
+          ·
+          <NuxtLink to="/faq" class="hover:text-slate-300">FAQ</NuxtLink>
         </p>
       </div>
     </footer>

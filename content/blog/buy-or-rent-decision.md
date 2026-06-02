@@ -146,3 +146,4 @@ $$300 \times (1.05)^{10} ≈ 489 \text{ 萬}$$
 - [兩段式利率的陷阱](/blog/two-stage-rate-trap)
 - [首購族最常踩的 5 個房貸地雷](/blog/first-buyer-pitfalls)
 - [房貸轉貸划不划算？](/blog/refinance-worth-it)
+- [自備款要準備多少才合理？](/blog/down-payment)
