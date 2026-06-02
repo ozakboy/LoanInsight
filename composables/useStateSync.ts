@@ -64,28 +64,36 @@ export function useStateSync(key: string, state: Namespace): UseStateSyncReturn 
     }
   }
 
-  function hydrate() {
+  function hydrate(): 'url' | 'localStorage' | 'none' {
     let source: Namespace | null = null
+    let from: 'url' | 'localStorage' | 'none' = 'none'
 
     // 1. 優先讀 URL hash（分享連結）
     const hash = window.location.hash.replace(/^#/, '')
     if (hash) {
       const params = new URLSearchParams(hash)
       const s = params.get('s')
-      if (s) source = decode(s)
+      if (s) {
+        source = decode(s)
+        if (source) from = 'url'
+      }
     }
 
     // 2. 退而求其次讀 localStorage
     if (!source) {
       try {
         const stored = localStorage.getItem(key)
-        if (stored) source = decode(stored)
+        if (stored) {
+          source = decode(stored)
+          if (source) from = 'localStorage'
+        }
       } catch {
         /* 隱身模式 / 配額爆掉等情況忽略 */
       }
     }
 
     if (source) applyPartial(state, source)
+    return from
   }
 
   function persist() {
@@ -124,8 +132,18 @@ export function useStateSync(key: string, state: Namespace): UseStateSyncReturn 
   }
 
   onMounted(() => {
-    hydrate()
-    // 對每個命名空間設一個 deep watcher，避免重複序列化整個物件
+    // 順序很關鍵：先呼叫一次 hydrate 套用 URL hash / localStorage，
+    // 接著「立刻」呼叫 persist() 把載入的狀態同步寫入 localStorage
+    // （URL hash 載入時 watcher 還未綁，否則 localStorage 不會被更新，
+    //  使用者下次回來會看到舊資料）。
+    const from = hydrate()
+    persist()
+    if (from !== 'none') {
+      // eslint-disable-next-line no-console
+      console.info(`[loaninsight] state hydrated from ${from}`)
+    }
+
+    // 後續對每個命名空間設一個 deep watcher，state 變動時更新 URL hash + localStorage
     for (const ns of Object.keys(state)) {
       watch(
         () => state[ns],
