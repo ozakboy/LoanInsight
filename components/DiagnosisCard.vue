@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { DsrDiagnosis, RiskLevel } from '../types/loan'
-import type { ScenarioDiagnosis } from '../composables/useLoanCalculator'
-import { formatCurrency, formatPercent } from '../utils/finance'
+import type { DsrDiagnosis, RiskLevel } from '~/types/loan'
+import type { ScenarioDiagnosis } from '~/composables/useLoanCalculator'
+import { formatCurrency, formatPercent } from '~/utils/finance'
 
 const props = defineProps<{ diagnosis: ScenarioDiagnosis; name: string }>()
 

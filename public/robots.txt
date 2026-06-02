@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://loaninsight.ozakboy.life/sitemap.xml

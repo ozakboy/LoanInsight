@@ -1,0 +1,203 @@
+<script setup lang="ts">
+import { reactive, ref } from 'vue'
+import type { LoanInput, FinanceProfile } from '~/types/loan'
+
+useSeoMeta({
+  title: 'LoanInsight 智貸見解 — 真實 APR 貸款試算與財務診斷工具',
+  description:
+    '結合真實 APR（含開辦費攤還）與分階段 DSR 收支診斷的現代化貸款試算工具，支援兩段式利率、寬限期與雙銀行同屏 PK。資料不外流、全前端即時計算。',
+  ogTitle: 'LoanInsight 智貸見解｜真實 APR 貸款試算',
+  ogDescription:
+    '揭露隱藏的開辦費成本、分階段收支壓力診斷、雙銀行同屏 PK。零後端、不蒐集任何個人財務資料。',
+  ogType: 'website',
+  ogUrl: 'https://loaninsight.ozakboy.life/',
+  twitterCard: 'summary_large_image',
+})
+
+// 個人財務狀況（雙方案共用，用於 DSR）
+const profile = reactive<FinanceProfile>({
+  monthlyIncome: 80000,
+  existingExpenses: 25000,
+})
+
+const defaultA: LoanInput = {
+  name: '銀行 A',
+  amountWan: 800,
+  years: 30,
+  gracePeriodMonths: 0,
+  rateType: 'dual',
+  stage1Months: 24,
+  stage1Rate: 1.7,
+  stage2Rate: 2.1,
+  originationFee: 30000,
+}
+
+const defaultB: LoanInput = {
+  name: '銀行 B',
+  amountWan: 800,
+  years: 30,
+  gracePeriodMonths: 0,
+  rateType: 'single',
+  stage1Months: 24,
+  stage1Rate: 2.06,
+  stage2Rate: 2.4,
+  originationFee: 9000,
+}
+
+const { input: inputA, result: resultA } = useLoanScenario(defaultA)
+const { input: inputB, result: resultB } = useLoanScenario(defaultB)
+
+const diagA = useDiagnosis(resultA, profile)
+const diagB = useDiagnosis(resultB, profile)
+
+const activeChart = ref<'A' | 'B'>('A')
+</script>
+
+<template>
+  <!-- Hero 介紹（SEO 文案） -->
+  <section class="card p-6 md:p-8">
+    <span
+      class="inline-flex items-center gap-1.5 bg-indigo-500/10 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+    >
+      <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+      貸款試算 · 財務診斷
+    </span>
+    <h1 class="text-2xl md:text-3xl font-black mt-3 tracking-tight leading-tight text-slate-900">
+      免費房貸試算工具 — 真實 APR、寬限期、兩段式利率一次算清
+    </h1>
+    <p class="text-slate-600 mt-3 text-base leading-relaxed">
+      LoanInsight 結合
+      <strong class="text-slate-900">真實 APR（含開辦費攤還）</strong>
+      與
+      <strong class="text-slate-900">分階段 DSR 收支動態診斷</strong>，
+      支援兩段式利率、寬限期、雙銀行同屏 PK。讓隱藏的貸款成本無所遁形，
+      <strong class="text-slate-900">所有計算皆於瀏覽器端完成、不蒐集任何個人財務資料</strong>。
+    </p>
+  </section>
+
+  <!-- 個人財務狀況 -->
+  <section class="card p-6">
+    <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2 mb-4">
+      <span class="w-1.5 h-4 bg-emerald-500 rounded"></span>
+      個人財務狀況（用於 DSR 收支診斷）
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label class="field-label">月收入</label>
+        <div class="relative">
+          <span
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium"
+            >NT$</span
+          >
+          <input
+            v-model.number="profile.monthlyIncome"
+            type="number"
+            min="0"
+            step="1000"
+            class="field-input pl-12"
+          />
+        </div>
+      </div>
+      <div>
+        <label class="field-label">既有固定支出（不含本貸款）</label>
+        <div class="relative">
+          <span
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium"
+            >NT$</span
+          >
+          <input
+            v-model.number="profile.existingExpenses"
+            type="number"
+            min="0"
+            step="1000"
+            class="field-input pl-12"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 雙方案輸入 + 診斷 -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="space-y-6">
+      <LoanInputPanel v-model="inputA" accent="blue" />
+      <DiagnosisCard :diagnosis="diagA" :name="inputA.name" />
+    </div>
+    <div class="space-y-6">
+      <LoanInputPanel v-model="inputB" accent="indigo" />
+      <DiagnosisCard :diagnosis="diagB" :name="inputB.name" />
+    </div>
+  </div>
+
+  <!-- 報表交界橫幅廣告 -->
+  <AdSlot format="banner" />
+
+  <!-- 攤還曲線（可切換方案） -->
+  <section class="space-y-3">
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="px-4 py-1.5 rounded-full text-sm font-bold transition"
+        :class="
+          activeChart === 'A'
+            ? 'bg-blue-600 text-white shadow'
+            : 'bg-white text-slate-500 border border-slate-200'
+        "
+        @click="activeChart = 'A'"
+      >
+        {{ inputA.name }}
+      </button>
+      <button
+        type="button"
+        class="px-4 py-1.5 rounded-full text-sm font-bold transition"
+        :class="
+          activeChart === 'B'
+            ? 'bg-indigo-600 text-white shadow'
+            : 'bg-white text-slate-500 border border-slate-200'
+        "
+        @click="activeChart = 'B'"
+      >
+        {{ inputB.name }}
+      </button>
+    </div>
+    <ClientOnly>
+      <AmortizationChart :result="activeChart === 'A' ? resultA : resultB" />
+      <template #fallback>
+        <div class="card p-6 h-72 flex items-center justify-center text-slate-400 text-sm">
+          載入圖表中…
+        </div>
+      </template>
+    </ClientOnly>
+  </section>
+
+  <!-- 雙銀行 PK -->
+  <BankComparison
+    :name-a="inputA.name"
+    :name-b="inputB.name"
+    :result-a="resultA"
+    :result-b="resultB"
+  />
+
+  <!-- 文章導流區塊 -->
+  <section class="card p-6">
+    <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2 mb-3">
+      <span class="w-1.5 h-5 bg-amber-500 rounded"></span>
+      想更深入了解貸款？閱讀知識文章
+    </h2>
+    <p class="text-sm text-slate-600 mb-4">
+      由淺入深，幫你避開常見陷阱，做出更聰明的貸款決策。
+    </p>
+    <NuxtLink
+      to="/blog"
+      class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition"
+    >
+      前往貸款知識文章 →
+    </NuxtLink>
+  </section>
+
+  <!-- 免責聲明 -->
+  <p class="text-xs text-slate-400 leading-relaxed px-1">
+    ※ 本工具所有計算皆於瀏覽器端即時完成，不蒐集或上傳任何個人財務資料。試算結果採等額本息法與牛頓迭代法估算，
+    實際數字依各銀行計息方式、撥款日與費用認定而異，僅供財務規劃參考，不構成任何貸款或投資建議。
+  </p>
+</template>

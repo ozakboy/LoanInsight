@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { LoanInput } from '../types/loan'
+import type { LoanInput } from '~/types/loan'
 import RangeInput from './RangeInput.vue'
-import { formatCurrency } from '../utils/finance'
+import { formatCurrency } from '~/utils/finance'
 
 const input = defineModel<LoanInput>({ required: true })
 

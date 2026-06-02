@@ -1,27 +1,27 @@
 {
   "name": "loaninsight",
   "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "description": "LoanInsight 智貸見解 - 現代化貸款試算與財務診斷工具",
+  "version": "2.0.0",
+  "description": "LoanInsight 智貸見解 — 現代化貸款試算與財務診斷工具（Nuxt 3 SSG）",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit"
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "chart.js": "^4.4.7",
-    "vue": "^3.5.13",
     "vue-chartjs": "^5.3.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
+    "@nuxt/content": "^2.13.4",
+    "@nuxtjs/sitemap": "^7.2.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "nuxt": "^3.15.4",
+    "nuxt-gtag": "^3.0.2",
     "typescript": "~5.6.3",
-    "vite": "^6.0.7",
     "vue-tsc": "^2.2.0"
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { LoanResult } from '../types/loan'
-import { formatCurrency, formatPercent } from '../utils/finance'
+import type { LoanResult } from '~/types/loan'
+import { formatCurrency, formatPercent } from '~/utils/finance'
 
 const props = defineProps<{
   nameA: string

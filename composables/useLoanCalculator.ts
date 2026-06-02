@@ -4,8 +4,8 @@ import type {
   FinanceProfile,
   LoanResult,
   DsrDiagnosis,
-} from '../types/loan'
-import { calculateLoan, diagnoseDsr } from '../utils/finance'
+} from '~/types/loan'
+import { calculateLoan, diagnoseDsr } from '~/utils/finance'
 
 export interface ScenarioDiagnosis {
   result: LoanResult

@@ -13,8 +13,8 @@ import {
   Filler,
   type TooltipItem,
 } from 'chart.js'
-import type { LoanResult } from '../types/loan'
-import { formatCurrency } from '../utils/finance'
+import type { LoanResult } from '~/types/loan'
+import { formatCurrency } from '~/utils/finance'
 
 ChartJS.register(
   Title,

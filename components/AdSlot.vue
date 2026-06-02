@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { adsConfig, type AdFormat } from '../config/ads'
+import { adsConfig, type AdFormat } from '~/config/ads'
 
 declare global {
   interface Window {
