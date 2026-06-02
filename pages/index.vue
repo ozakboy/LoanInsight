@@ -14,6 +14,21 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
+// 取得最新 3 篇文章用於首頁文章區塊（預渲染時打包進 HTML）
+const { data: latestPosts } = await useAsyncData('home-latest-posts', () =>
+  queryContent('/blog')
+    .where({ _draft: { $ne: true } })
+    .sort({ date: -1 })
+    .limit(3)
+    .find(),
+)
+
+function formatDate(iso?: string): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`
+}
+
 // 個人財務狀況（雙方案共用，用於 DSR）
 const profile = reactive<FinanceProfile>({
   monthlyIncome: 80000,
@@ -178,21 +193,49 @@ const activeChart = ref<'A' | 'B'>('A')
     :result-b="resultB"
   />
 
-  <!-- 文章導流區塊 -->
+  <!-- 最新文章區塊（導流 + SEO 內部連結） -->
   <section class="card p-6">
-    <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2 mb-3">
-      <span class="w-1.5 h-5 bg-amber-500 rounded"></span>
-      想更深入了解貸款？閱讀知識文章
-    </h2>
-    <p class="text-sm text-slate-600 mb-4">
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+        <span class="w-1.5 h-5 bg-amber-500 rounded"></span>
+        貸款知識文章
+      </h2>
+      <NuxtLink
+        to="/blog"
+        class="text-xs font-bold text-blue-600 hover:text-blue-700 transition shrink-0"
+      >
+        全部文章 →
+      </NuxtLink>
+    </div>
+    <p class="text-sm text-slate-600 mb-5">
       由淺入深，幫你避開常見陷阱，做出更聰明的貸款決策。
     </p>
-    <NuxtLink
-      to="/blog"
-      class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition"
-    >
-      前往貸款知識文章 →
-    </NuxtLink>
+    <div v-if="latestPosts && latestPosts.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <NuxtLink
+        v-for="post in latestPosts"
+        :key="post._path"
+        :to="post._path"
+        class="block rounded-xl border border-slate-200 hover:border-blue-300 p-4 transition group bg-slate-50/30 hover:bg-white"
+      >
+        <p class="text-[11px] font-bold text-slate-400 mb-1">
+          {{ formatDate(post.date as string | undefined) }}
+        </p>
+        <h3
+          class="text-sm font-extrabold text-slate-900 group-hover:text-blue-700 transition leading-snug"
+        >
+          {{ post.title }}
+        </h3>
+        <p
+          v-if="post.description"
+          class="text-xs text-slate-500 mt-2 leading-relaxed line-clamp-3"
+        >
+          {{ post.description }}
+        </p>
+        <p class="text-[11px] font-bold text-blue-600 mt-3 group-hover:translate-x-0.5 transition">
+          繼續閱讀 →
+        </p>
+      </NuxtLink>
+    </div>
   </section>
 
   <!-- 免責聲明 -->
