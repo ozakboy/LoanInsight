@@ -125,6 +125,7 @@ const result = computed(() => calculateBuyVsRent(input))
           <input
             v-model.number="input.monthlyRent"
             type="number"
+            inputmode="decimal"
             min="0"
             step="1000"
             class="field-input pl-12"

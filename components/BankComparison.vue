@@ -123,8 +123,8 @@ function cellClass(m: Metric, side: 'a' | 'b'): string {
     </div>
 
     <!-- 對比表 -->
-    <div class="overflow-x-auto border border-slate-200 rounded-xl">
-      <table class="w-full text-sm">
+    <div class="overflow-x-auto border border-slate-200 rounded-xl -mx-px">
+      <table class="w-full text-sm min-w-[560px]">
         <thead>
           <tr class="bg-slate-50 border-b border-slate-200 text-slate-700">
             <th class="p-3 text-left font-bold">比較項目</th>

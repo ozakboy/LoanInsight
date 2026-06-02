@@ -39,18 +39,19 @@ const trackStyle = computed(() => ({
 
 <template>
   <div>
-    <div class="flex items-end justify-between gap-3 mb-1.5">
-      <label class="field-label mb-0">{{ label }}</label>
-      <div class="flex items-center gap-1.5 shrink-0">
+    <div class="flex items-end justify-between gap-2 sm:gap-3 mb-1.5">
+      <label class="field-label mb-0 min-w-0 leading-tight">{{ label }}</label>
+      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <input
           v-model.number="value"
           type="number"
+          inputmode="decimal"
           :min="min"
           :max="max"
           :step="step"
-          class="w-28 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-right text-base font-bold text-blue-700 outline-none transition focus:border-blue-500 focus:shadow-focus"
+          class="w-20 sm:w-28 rounded-lg border border-slate-300 bg-white px-2 sm:px-2.5 py-1.5 text-right text-sm sm:text-base font-bold text-blue-700 outline-none transition focus:border-blue-500 focus:shadow-focus"
         />
-        <span v-if="unit" class="text-sm font-medium text-slate-500">{{ unit }}</span>
+        <span v-if="unit" class="text-xs sm:text-sm font-medium text-slate-500">{{ unit }}</span>
       </div>
     </div>
     <input

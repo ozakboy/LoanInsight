@@ -146,6 +146,7 @@ const verdictStyles = computed(() => {
           <input
             v-model.number="input.refinanceFees"
             type="number"
+            inputmode="decimal"
             min="0"
             step="1000"
             class="field-input pl-12"
@@ -161,6 +162,7 @@ const verdictStyles = computed(() => {
           <input
             v-model.number="input.penalty"
             type="number"
+            inputmode="decimal"
             min="0"
             step="1000"
             class="field-input pl-12"

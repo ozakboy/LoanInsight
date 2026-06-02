@@ -134,6 +134,7 @@ const accentText: Record<string, string> = {
         <input
           v-model.number="input.originationFee"
           type="number"
+            inputmode="decimal"
           min="0"
           step="1000"
           class="field-input pl-12"
@@ -153,6 +154,7 @@ const accentText: Record<string, string> = {
         <input
           v-model.number="input.extraMonthlyPrincipal"
           type="number"
+            inputmode="decimal"
           min="0"
           step="1000"
           placeholder="0（不加碼）"

@@ -109,6 +109,7 @@ const activeChart = ref<'A' | 'B'>('A')
           <input
             v-model.number="profile.monthlyIncome"
             type="number"
+            inputmode="decimal"
             min="0"
             step="1000"
             class="field-input pl-12"
@@ -125,6 +126,7 @@ const activeChart = ref<'A' | 'B'>('A')
           <input
             v-model.number="profile.existingExpenses"
             type="number"
+            inputmode="decimal"
             min="0"
             step="1000"
             class="field-input pl-12"
