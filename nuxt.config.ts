@@ -107,8 +107,33 @@ export default defineNuxtConfig({
       ],
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+      // HTML 與 JSON 都走 network，避免舊 HTML 索取已失效的 JSON 路徑
+      globPatterns: ['**/*.{js,css,svg,png,ico,woff2}'],
       navigateFallback: null,
+      // 新版 SW 立即啟用，覆寫舊快取（不必等使用者重開所有分頁）
+      skipWaiting: true,
+      clientsClaim: true,
+      cleanupOutdatedCaches: true,
+      // 對 navigation 與 API 走 network-first，文章內容更新即時反映
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }: { request: Request }) =>
+            request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'pages-cache',
+            networkTimeoutSeconds: 5,
+          },
+        },
+        {
+          urlPattern: /\/api\/_content\/.*/,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'content-api-cache',
+            networkTimeoutSeconds: 5,
+          },
+        },
+      ],
     },
     client: {
       installPrompt: false,
