@@ -4,7 +4,7 @@ import type {
   ScheduleRow,
   RiskLevel,
   DsrDiagnosis,
-} from '../types/loan'
+} from '~/types/loan'
 
 const WAN = 10_000
 
@@ -45,6 +45,7 @@ export function buildSchedule(input: LoanInput): ScheduleRow[] {
     : Math.min(Math.max(0, Math.round(input.stage1Months)), totalMonths)
   const i1 = input.stage1Rate / 100 / 12
   const i2 = isSingle ? i1 : input.stage2Rate / 100 / 12
+  const extra = Math.max(0, input.extraMonthlyPrincipal || 0)
 
   const rows: ScheduleRow[] = []
   let balance = principal
@@ -68,7 +69,7 @@ export function buildSchedule(input: LoanInput): ScheduleRow[] {
       principalPaid = 0
     } else {
       const remaining = totalMonths - month + 1
-      // 進入攤還期、或利率切換階段時，重算月付金
+      // 進入攤還期、或利率切換階段時，重算月付金（基於當前剩餘本金）
       if (prevWasGrace || monthlyRate !== prevRate) {
         levelPayment = annuityPayment(balance, monthlyRate, remaining)
       }
@@ -79,6 +80,15 @@ export function buildSchedule(input: LoanInput): ScheduleRow[] {
         principalPaid = balance
         payment = principalPaid + interest
       }
+    }
+
+    // 提前還款：攤還期內每月額外償還本金
+    if (!isGrace && extra > 0 && balance - principalPaid > 0) {
+      const extraPay = Math.min(extra, balance - principalPaid)
+      principalPaid += extraPay
+      payment += extraPay
+      // 加碼會減少剩餘本金 → 下一期重新計算月付金以提前還清
+      prevRate = Number.NaN
     }
 
     balance -= principalPaid
@@ -97,6 +107,8 @@ export function buildSchedule(input: LoanInput): ScheduleRow[] {
 
     prevRate = monthlyRate
     prevWasGrace = isGrace
+
+    if (balance <= 0) break // 提前還清
   }
 
   return rows
@@ -162,7 +174,8 @@ export function diagnoseDsr(payment: number, disposableIncome: number): DsrDiagn
 export function calculateLoan(input: LoanInput): LoanResult {
   const schedule = buildSchedule(input)
   const principal = input.amountWan * WAN
-  const totalMonths = schedule.length
+  const baselineMonths = Math.round(input.years * 12)
+  const actualPayoffMonths = schedule.length
 
   const totalInterest = schedule.reduce((sum, r) => sum + r.interest, 0)
   const totalPayment = schedule.reduce((sum, r) => sum + r.payment, 0)
@@ -177,12 +190,12 @@ export function calculateLoan(input: LoanInput): LoanResult {
   const stage2Payment = maxIn(stage2Rows)
   const maxMonthlyPayment = Math.max(stage1Payment, stage2Payment)
 
-  // 名目加權平均利率（依各階段期數加權）
+  // 名目加權平均利率（依各階段實際出現的期數加權）
   const nominalRate =
-    totalMonths > 0
+    actualPayoffMonths > 0
       ? (stage1Rows.length * input.stage1Rate +
           stage2Rows.length * input.stage2Rate) /
-        totalMonths
+        actualPayoffMonths
       : 0
 
   const apr = computeApr(
@@ -190,11 +203,21 @@ export function calculateLoan(input: LoanInput): LoanResult {
     principal - input.originationFee,
   )
 
+  // 提前還款的省利息效果：建立同條件但無加碼的基準排程
+  let monthsSaved = 0
+  let interestSaved = 0
+  if ((input.extraMonthlyPrincipal || 0) > 0) {
+    const baseline = buildSchedule({ ...input, extraMonthlyPrincipal: 0 })
+    const baselineInterest = baseline.reduce((s, r) => s + r.interest, 0)
+    monthsSaved = baseline.length - actualPayoffMonths
+    interestSaved = baselineInterest - totalInterest
+  }
+
   return {
     schedule,
     principal,
     originationFee: input.originationFee,
-    totalMonths,
+    totalMonths: baselineMonths,
     totalInterest,
     totalPayment,
     totalCost,
@@ -203,6 +226,9 @@ export function calculateLoan(input: LoanInput): LoanResult {
     maxMonthlyPayment,
     nominalRate,
     apr,
+    actualPayoffMonths,
+    monthsSaved,
+    interestSaved,
   }
 }
 

@@ -141,5 +141,27 @@ const accentText: Record<string, string> = {
       </div>
       <p class="text-xs text-slate-400 mt-1">含信用查詢費、銀行手續費、代書費等前期支出</p>
     </div>
+
+    <!-- 提前還款（每月加碼還本）-->
+    <div class="pt-1 border-t border-slate-100">
+      <label class="field-label flex items-center gap-2">
+        <span class="text-emerald-600">💰</span>
+        每月加碼還本（提前還款試算）
+      </label>
+      <div class="relative">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">NT$</span>
+        <input
+          v-model.number="input.extraMonthlyPrincipal"
+          type="number"
+          min="0"
+          step="1000"
+          placeholder="0（不加碼）"
+          class="field-input pl-12"
+        />
+      </div>
+      <p class="text-xs text-slate-400 mt-1">
+        填寫每月在規定月付之外，額外償還的本金。下方會自動顯示可提早還清的月數與省下的利息。
+      </p>
+    </div>
   </div>
 </template>

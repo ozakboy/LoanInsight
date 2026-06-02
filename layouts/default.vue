@@ -21,8 +21,9 @@
             智貸見解
           </span>
         </NuxtLink>
-        <nav class="flex items-center gap-5 text-sm font-bold text-slate-300">
+        <nav class="flex items-center gap-3 md:gap-5 text-xs md:text-sm font-bold text-slate-300">
           <NuxtLink to="/" class="hover:text-white transition">試算工具</NuxtLink>
+          <NuxtLink to="/buy-vs-rent" class="hover:text-white transition">買 vs 租</NuxtLink>
           <NuxtLink to="/blog" class="hover:text-white transition">貸款知識</NuxtLink>
         </nav>
       </div>
@@ -60,6 +61,8 @@
         <p>© 2026 LoanInsight Project. Built with Nuxt 3.</p>
         <p class="text-slate-500">
           <NuxtLink to="/" class="hover:text-slate-300">試算工具</NuxtLink>
+          ·
+          <NuxtLink to="/buy-vs-rent" class="hover:text-slate-300">買 vs 租</NuxtLink>
           ·
           <NuxtLink to="/blog" class="hover:text-slate-300">貸款知識</NuxtLink>
         </p>

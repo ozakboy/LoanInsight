@@ -97,6 +97,34 @@ const hasTwoStages = computed(() => r.value.schedule.some((row) => row.stage ===
       </div>
     </div>
 
+    <!-- 提前還款效益（僅有加碼時顯示）-->
+    <div
+      v-if="r.monthsSaved > 0"
+      class="rounded-xl bg-emerald-50 border border-emerald-200 p-4"
+    >
+      <p class="text-sm font-bold text-emerald-800 flex items-center gap-1.5 mb-2">
+        💰 提前還款效益
+      </p>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p class="text-xs text-emerald-700/80">提早還清</p>
+          <p class="text-lg font-black text-emerald-900">
+            {{ Math.floor(r.monthsSaved / 12) }} 年 {{ r.monthsSaved % 12 }} 月
+          </p>
+          <p class="text-[11px] text-emerald-600/70">
+            原 {{ r.totalMonths }} 期 → 實際 {{ r.actualPayoffMonths }} 期
+          </p>
+        </div>
+        <div>
+          <p class="text-xs text-emerald-700/80">省下利息</p>
+          <p class="text-lg font-black text-emerald-900">
+            NT$ {{ formatCurrency(r.interestSaved) }}
+          </p>
+          <p class="text-[11px] text-emerald-600/70">vs. 不加碼還款</p>
+        </div>
+      </div>
+    </div>
+
     <!-- 分階段 DSR 診斷 -->
     <div class="space-y-3">
       <p class="text-sm font-bold text-slate-700">

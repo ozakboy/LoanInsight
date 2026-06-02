@@ -20,6 +20,8 @@ export interface LoanInput {
   stage2Rate: number
   /** 開辦費用總額（元）— 信用查詢費、銀行手續費、代書費等一次性支出 */
   originationFee: number
+  /** 每月加碼還本金額（元，0 為不加碼）— 攤還期內每月額外償還的本金 */
+  extraMonthlyPrincipal: number
 }
 
 /** 個人財務狀況（用於 DSR 診斷，雙方案共用） */
@@ -89,4 +91,10 @@ export interface LoanResult {
   nominalRate: number
   /** 真實 APR 總費用年百分率（%）— 含開辦費，牛頓迭代法求得 */
   apr: number
+  /** 實際還清月數（若有提前還款可能小於 totalMonths） */
+  actualPayoffMonths: number
+  /** 比不加碼還本時提早還清的月數 */
+  monthsSaved: number
+  /** 比不加碼還本時省下的利息（元） */
+  interestSaved: number
 }

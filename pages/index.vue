@@ -45,6 +45,7 @@ const defaultA: LoanInput = {
   stage1Rate: 1.7,
   stage2Rate: 2.1,
   originationFee: 30000,
+  extraMonthlyPrincipal: 0,
 }
 
 const defaultB: LoanInput = {
@@ -57,6 +58,7 @@ const defaultB: LoanInput = {
   stage1Rate: 2.06,
   stage2Rate: 2.4,
   originationFee: 9000,
+  extraMonthlyPrincipal: 0,
 }
 
 const { input: inputA, result: resultA } = useLoanScenario(defaultA)
