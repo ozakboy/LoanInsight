@@ -102,6 +102,9 @@ export function useStateSync(key: string, state: Namespace): UseStateSyncReturn 
   }
 
   function copyShareLink(): Promise<boolean> {
+    // 強制同步 persist 一次：避免 watcher 排程在 'post' 還沒跑，URL hash
+    // 仍是上一個值就被讀取（會複製到舊內容到剪貼簿）。
+    persist()
     if (!navigator.clipboard) return Promise.resolve(false)
     return navigator.clipboard
       .writeText(window.location.href)
