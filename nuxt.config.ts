@@ -28,6 +28,11 @@ export default defineNuxtConfig({
         { charset: 'UTF-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
         { name: 'google-adsense-account', content: 'ca-pub-5488118663607574' },
+        // Google Search Console 所有權驗證
+        {
+          name: 'google-site-verification',
+          content: 'npSud3_qj3nhajB0DeUEYYZbdflOR4vLDaLWnXD2liU',
+        },
         // 預設 OG 圖片（個別頁可用 useSeoMeta 覆寫）
         { property: 'og:image', content: `${siteUrl}/og-image.png` },
         { property: 'og:image:width', content: '1200' },
@@ -76,10 +81,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // Google Analytics 4（上線前把 ID 填入下方或設環境變數 NUXT_PUBLIC_GTAG_ID）
+  // Google Analytics 4
   gtag: {
-    id: process.env.NUXT_PUBLIC_GTAG_ID || '',
-    enabled: !!process.env.NUXT_PUBLIC_GTAG_ID,
+    id: process.env.NUXT_PUBLIC_GTAG_ID || 'G-RP8SWSM6L5',
+    enabled: true,
   },
 
   // PWA：可安裝到手機主畫面、離線可用
