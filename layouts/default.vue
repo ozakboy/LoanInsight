@@ -35,9 +35,10 @@ watch(
           </NuxtLink>
 
           <!-- 桌面版水平導覽（≥md）-->
-          <nav class="hidden md:flex items-center gap-5 text-sm font-bold text-slate-300">
-            <NuxtLink to="/" class="hover:text-white transition">試算</NuxtLink>
+          <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm font-bold text-slate-300">
+            <NuxtLink to="/" class="hover:text-white transition">房貸</NuxtLink>
             <NuxtLink to="/refinance" class="hover:text-white transition">轉貸</NuxtLink>
+            <NuxtLink to="/personal-loan" class="hover:text-white transition">信貸</NuxtLink>
             <NuxtLink to="/buy-vs-rent" class="hover:text-white transition">買 vs 租</NuxtLink>
             <NuxtLink to="/blog" class="hover:text-white transition">文章</NuxtLink>
             <NuxtLink to="/faq" class="hover:text-white transition">FAQ</NuxtLink>
@@ -108,6 +109,12 @@ watch(
               <span>🔄</span> 轉貸試算
             </NuxtLink>
             <NuxtLink
+              to="/personal-loan"
+              class="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white px-4 py-3 rounded-xl transition flex items-center gap-2"
+            >
+              <span>💳</span> 信貸試算
+            </NuxtLink>
+            <NuxtLink
               to="/buy-vs-rent"
               class="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white px-4 py-3 rounded-xl transition flex items-center gap-2"
             >
@@ -166,6 +173,8 @@ watch(
           <NuxtLink to="/" class="hover:text-slate-300 transition">房貸試算</NuxtLink>
           <span class="text-slate-700">·</span>
           <NuxtLink to="/refinance" class="hover:text-slate-300 transition">轉貸試算</NuxtLink>
+          <span class="text-slate-700">·</span>
+          <NuxtLink to="/personal-loan" class="hover:text-slate-300 transition">信貸試算</NuxtLink>
           <span class="text-slate-700">·</span>
           <NuxtLink to="/buy-vs-rent" class="hover:text-slate-300 transition">買 vs 租</NuxtLink>
           <span class="text-slate-700">·</span>
