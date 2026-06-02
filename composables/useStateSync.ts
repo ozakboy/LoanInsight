@@ -90,15 +90,15 @@ export function useStateSync(key: string, state: Namespace): UseStateSyncReturn 
     }
   }
 
-  // 在 setup 的最早時機就抓 hash 快照。
-  // 觀察到實際線上會發生：等到 onMounted 才讀 window.location.hash 是空的，
-  // 即使網址列明明有 hash。猜測是 Vue Router 的 scroll behavior 或 Nuxt
-  // 內部處理在 onMounted 之前把 hash 清掉了。用快照值繞過這個時機問題。
-  const initialHash = window.location.hash
-  console.info(`${LOG} setup-time hash captured =`, initialHash)
-  // 也保留 href 比對，幫助判斷是不是真的有 hash
-  const initialHref = window.location.href
-  console.info(`${LOG} setup-time href =`, initialHref)
+  // 從 Nuxt plugin 抓取「真正最早期」的 hash（在 Vue Router 之前），
+  // 退而求其次才用 setup-time 的 window.location.hash
+  const pluginHash =
+    typeof window.__loaninsightInitialHash === 'string'
+      ? window.__loaninsightInitialHash
+      : ''
+  const setupHash = window.location.hash
+  const initialHash = pluginHash || setupHash
+  console.info(`${LOG} hash sources:`, { pluginHash, setupHash, picked: initialHash })
 
   function hydrate(): 'url' | 'localStorage' | 'none' {
     let source: Namespace | null = null
