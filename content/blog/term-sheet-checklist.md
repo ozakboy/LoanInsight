@@ -1,7 +1,7 @@
 ---
 title: 房貸 Term Sheet 怎麼看？10 項必對欄位 + 業務員常隱瞞的細節
 description: 銀行給你的「條件書 Term Sheet」短短一頁但每個欄位都決定你 30 年的成本。本文逐項解釋必看的 10 個欄位、3 個業務員不會主動講的事，並提供對比表範本。
-date: 2026-06-28
+date: 2026-02-26
 slug: term-sheet-checklist
 ---
 
