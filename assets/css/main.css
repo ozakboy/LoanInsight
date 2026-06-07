@@ -57,6 +57,28 @@ input[type='range']::-moz-range-thumb {
   box-shadow: 0 1px 4px rgba(37, 99, 235, 0.4);
 }
 
+/* 列印 / 存成 PDF：隱藏導覽、頁尾、廣告與互動按鈕，只留試算摘要 */
+@media print {
+  header,
+  footer,
+  .no-print,
+  .adsbygoogle,
+  aside[aria-label='advertisement'] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  main {
+    padding: 0 !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border-color: #cbd5e1 !important;
+    break-inside: avoid;
+  }
+}
+
 /* Markdown 文章內容樣式 */
 .prose-article {
   @apply max-w-none text-slate-700 leading-relaxed;

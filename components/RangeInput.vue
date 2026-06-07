@@ -26,6 +26,13 @@ const value = computed({
   set: (v: number) => emit('update:modelValue', clamp(Number(v))),
 })
 
+/** +/− 微調：以 step 為單位增減，避免浮點誤差後夾在範圍內 */
+function nudge(direction: 1 | -1) {
+  const decimals = (String(props.step).split('.')[1] || '').length
+  const next = Number((value.value + direction * props.step).toFixed(decimals))
+  value.value = next
+}
+
 const percent = computed(() => {
   const range = props.max - props.min
   if (range <= 0) return 0
@@ -42,6 +49,15 @@ const trackStyle = computed(() => ({
     <div class="flex items-end justify-between gap-2 sm:gap-3 mb-1.5">
       <label class="field-label mb-0 min-w-0 leading-tight">{{ label }}</label>
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <button
+          type="button"
+          aria-label="減少"
+          class="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-slate-300 bg-white text-lg font-bold leading-none text-slate-600 transition hover:bg-slate-50 active:bg-slate-100 disabled:opacity-40"
+          :disabled="value <= min"
+          @click="nudge(-1)"
+        >
+          −
+        </button>
         <input
           v-model.number="value"
           type="number"
@@ -49,8 +65,17 @@ const trackStyle = computed(() => ({
           :min="min"
           :max="max"
           :step="step"
-          class="w-20 sm:w-28 rounded-lg border border-slate-300 bg-white px-2 sm:px-2.5 py-1.5 text-right text-sm sm:text-base font-bold text-blue-700 outline-none transition focus:border-blue-500 focus:shadow-focus"
+          class="w-16 sm:w-24 rounded-lg border border-slate-300 bg-white px-2 sm:px-2.5 py-1.5 text-right text-sm sm:text-base font-bold text-blue-700 outline-none transition focus:border-blue-500 focus:shadow-focus"
         />
+        <button
+          type="button"
+          aria-label="增加"
+          class="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-slate-300 bg-white text-lg font-bold leading-none text-slate-600 transition hover:bg-slate-50 active:bg-slate-100 disabled:opacity-40"
+          :disabled="value >= max"
+          @click="nudge(1)"
+        >
+          +
+        </button>
         <span v-if="unit" class="text-xs sm:text-sm font-medium text-slate-500">{{ unit }}</span>
       </div>
     </div>

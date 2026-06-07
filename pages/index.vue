@@ -178,31 +178,37 @@ function resetAll() {
 
   <!-- 攤還曲線（可切換方案） -->
   <section class="space-y-3">
-    <div class="flex items-center gap-2">
-      <button
-        type="button"
-        class="px-4 py-1.5 rounded-full text-sm font-bold transition"
-        :class="
-          activeChart === 'A'
-            ? 'bg-blue-600 text-white shadow'
-            : 'bg-white text-slate-500 border border-slate-200'
-        "
-        @click="activeChart = 'A'"
-      >
-        {{ inputA.name }}
-      </button>
-      <button
-        type="button"
-        class="px-4 py-1.5 rounded-full text-sm font-bold transition"
-        :class="
-          activeChart === 'B'
-            ? 'bg-indigo-600 text-white shadow'
-            : 'bg-white text-slate-500 border border-slate-200'
-        "
-        @click="activeChart = 'B'"
-      >
-        {{ inputB.name }}
-      </button>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="no-print flex items-center gap-2">
+        <button
+          type="button"
+          class="px-4 py-1.5 rounded-full text-sm font-bold transition"
+          :class="
+            activeChart === 'A'
+              ? 'bg-blue-600 text-white shadow'
+              : 'bg-white text-slate-500 border border-slate-200'
+          "
+          @click="activeChart = 'A'"
+        >
+          {{ inputA.name }}
+        </button>
+        <button
+          type="button"
+          class="px-4 py-1.5 rounded-full text-sm font-bold transition"
+          :class="
+            activeChart === 'B'
+              ? 'bg-indigo-600 text-white shadow'
+              : 'bg-white text-slate-500 border border-slate-200'
+          "
+          @click="activeChart = 'B'"
+        >
+          {{ inputB.name }}
+        </button>
+      </div>
+      <ExportActions
+        :name="activeChart === 'A' ? inputA.name : inputB.name"
+        :result="activeChart === 'A' ? resultA : resultB"
+      />
     </div>
     <ClientOnly>
       <AmortizationChart :result="activeChart === 'A' ? resultA : resultB" />

@@ -42,6 +42,7 @@ watch(
             <NuxtLink to="/buy-vs-rent" class="hover:text-white transition">買 vs 租</NuxtLink>
             <NuxtLink to="/blog" class="hover:text-white transition">文章</NuxtLink>
             <NuxtLink to="/faq" class="hover:text-white transition">FAQ</NuxtLink>
+            <NuxtLink to="/about" class="hover:text-white transition">關於</NuxtLink>
           </nav>
 
           <!-- 行動版 hamburger 按鈕（<md）-->
@@ -128,9 +129,15 @@ watch(
             </NuxtLink>
             <NuxtLink
               to="/faq"
-              class="col-span-2 bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white px-4 py-3 rounded-xl transition flex items-center gap-2"
+              class="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white px-4 py-3 rounded-xl transition flex items-center gap-2"
             >
               <span>❓</span> 常見問題 FAQ
+            </NuxtLink>
+            <NuxtLink
+              to="/about"
+              class="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white px-4 py-3 rounded-xl transition flex items-center gap-2"
+            >
+              <span>ℹ️</span> 關於本站
             </NuxtLink>
           </nav>
         </Transition>
@@ -181,6 +188,8 @@ watch(
           <NuxtLink to="/blog" class="hover:text-slate-300 transition">貸款知識</NuxtLink>
           <span class="text-slate-700">·</span>
           <NuxtLink to="/faq" class="hover:text-slate-300 transition">FAQ</NuxtLink>
+          <span class="text-slate-700">·</span>
+          <NuxtLink to="/about" class="hover:text-slate-300 transition">關於本站</NuxtLink>
         </nav>
       </div>
     </footer>
