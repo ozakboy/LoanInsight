@@ -1,0 +1,43 @@
+name: Update reference rates
+
+on:
+  # 每週一 01:10 UTC（台灣 09:10）自動抓取
+  schedule:
+    - cron: '10 1 * * 1'
+  # 可於 Actions 頁面手動觸發 —— 首次驗證爬蟲請用這個
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# 避免與部署互搶；同時間僅一個更新作業
+concurrency:
+  group: update-rates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 抓取並更新參考利率
+        run: node scripts/update-rates.mjs
+
+      - name: 有變動才提交（會觸發 Pages 重新部署）
+        run: |
+          if [ -n "$(git status --porcelain data/rates.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/rates.json
+            git commit -m "chore(rates): 自動更新台銀參考利率"
+            git push origin main
+          else
+            echo "利率無變動，略過提交"
+          fi

@@ -158,6 +158,9 @@ function resetAll() {
     </div>
   </section>
 
+  <!-- 市場參考利率（GitHub Actions 每週自動抓台銀更新） -->
+  <RateReference />
+
   <!-- 雙方案輸入 + 診斷
        桌面 (lg+)：subgrid 讓兩家銀行的 LoanInputPanel 對齊、DiagnosisCard 也對齊，
        即使 A=兩段式、B=一段式（高度不同）也不會跑位。
