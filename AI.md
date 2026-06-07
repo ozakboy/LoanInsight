@@ -97,13 +97,21 @@ server/api/__sitemap__/urls.ts  動態產生 sitemap 來源
 
 ## 6. 利率自動同步（架構已建，待首跑驗證）
 
-- 資料檔：`data/rates.json`（`auto: false` 表尚未經爬蟲驗證、為播種參考值）。
-- 爬蟲：`scripts/update-rates.mjs`（Node 內建 fetch，**故障安全**：解析失敗不覆蓋、不讓 CI 失敗）。
-- 排程：`.github/workflows/update-rates.yml`（每週 cron + `workflow_dispatch`，有變動才 commit 回 `main` → 觸發 Pages 重新部署）。
-- 顯示：`components/RateReference.vue`（首頁「市場參考利率」區塊）。
-- ⚠️ **沙箱連不到台銀（host allowlist），爬蟲選擇器尚未經真實 HTML 驗證**。
-  請到 GitHub Actions 手動 `workflow_dispatch` 跑一次 `Update reference rates`，
-  依 log 調整 `parseBaseLendingRate()`。成功後 `data/rates.json` 的 `auto` 會變 `true`。
+- 資料源（官方、機器友善，不再爬會維護的台銀 HTML 頁）：
+  - **央行重貼現率** — 中央銀行 OpenData JSON API：`cpx.cbc.gov.tw/api/OpenData/DataSet?set_id=6022&index=0`
+  - **五大銀行新承做購屋貸款/放款平均利率** — 政府資料開放平臺資料集 **10359**（先取 `data.gov.tw/api/v2/rest/dataset/10359` metadata → 找 CSV 下載網址 → 解析最新月）
+- 資料檔：`data/rates.json`（`auto: false` 表尚未經首跑驗證、為播種參考值；
+  rates 含 `mortgage_avg` / `five_bank_lending_avg` / `cbc_rediscount`）。
+- 爬蟲：`scripts/update-rates.mjs`（Node 內建 fetch，**故障安全**：任一源失敗/解析不到都不覆蓋、不讓 CI 失敗；
+  CSV 自動偵測 Big5 編碼；解析失敗印 `[diag]` 標題列/片段）。
+- 排程：`.github/workflows/update-rates.yml`（每週 cron + `workflow_dispatch`，有變動才 commit 回 `main`）。
+- 顯示：`components/RateReference.vue`（首頁「市場參考利率」三欄）。
+- ⚠️ **沙箱有 host allowlist 連不到上述網域，欄位對應尚未經真實回應驗證**。
+  請到 GitHub Actions 手動 `workflow_dispatch` 跑 `Update reference rates`，
+  依 `[diag]`（央行 JSON 欄位、CSV 標題列）調整 `fetchRediscount()` / `fetchGovMortgage()` 的欄位比對。
+  成功後 `data/rates.json` 的 `auto` 會變 `true`。
+- 背景：原本想爬的 `rate.bot.com.tw` 在維護期間會 302 導向 `enotice.bot.com.tw` 維護公告頁，
+  故改用上述開放資料 API（見 commit 歷史與對話脈絡）。
 
 ## 7. 仍未實作（真正可做的待辦）
 

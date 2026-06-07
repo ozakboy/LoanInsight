@@ -1,27 +1,30 @@
 {
   "updated": "2026-06-07",
   "auto": false,
-  "source": "台灣銀行",
-  "sourceUrl": "https://rate.bot.com.tw/lir?Lang=zh-TW",
-  "note": "以下為房貸定價常見的參考指標利率，非任一銀行的實際核貸利率。實際利率因個人條件而異。",
+  "attribution": "中央銀行 · 政府資料開放平臺",
+  "sourceUrl": "https://data.gov.tw/dataset/10359",
+  "note": "以下為市場參考指標，非個人實際核貸利率；實際利率因個人信用、職業與擔保品而異。",
   "rates": [
     {
-      "key": "bot_base_lending",
-      "label": "台灣銀行 基準放款利率",
-      "value": 3.394,
-      "unit": "%"
+      "key": "mortgage_avg",
+      "label": "五大銀行新承做購屋貸款平均利率",
+      "value": 2.31,
+      "unit": "%",
+      "period": ""
     },
     {
-      "key": "deposit_index",
-      "label": "定儲利率指數（房貸常用指標）",
-      "value": 1.345,
-      "unit": "%"
+      "key": "five_bank_lending_avg",
+      "label": "五大銀行新承做放款加權平均利率",
+      "value": 2.119,
+      "unit": "%",
+      "period": ""
     },
     {
       "key": "cbc_rediscount",
       "label": "中央銀行 重貼現率",
       "value": 2.0,
-      "unit": "%"
+      "unit": "%",
+      "period": ""
     }
   ]
 }

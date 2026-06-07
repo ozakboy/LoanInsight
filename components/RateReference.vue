@@ -6,11 +6,12 @@ interface RateItem {
   label: string
   value: number
   unit: string
+  period?: string
 }
 interface RatesData {
   updated: string
   auto: boolean
-  source: string
+  attribution: string
   sourceUrl: string
   note: string
   rates: RateItem[]
@@ -27,7 +28,7 @@ const data = ratesData as RatesData
         市場參考利率
       </h2>
       <span class="text-[11px] text-slate-400">
-        資料來源：{{ data.source }} ·
+        資料來源：{{ data.attribution }} ·
         {{ data.auto ? '每週自動更新' : '參考值' }} · 更新於 {{ data.updated }}
       </span>
     </div>
@@ -42,6 +43,7 @@ const data = ratesData as RatesData
         <p class="text-xl font-black text-slate-900 mt-1">
           {{ r.value }}<span class="text-sm font-bold text-slate-500">{{ r.unit }}</span>
         </p>
+        <p v-if="r.period" class="text-[11px] text-slate-400 mt-0.5">資料期別 {{ r.period }}</p>
       </div>
     </div>
 
@@ -52,7 +54,7 @@ const data = ratesData as RatesData
         target="_blank"
         rel="noopener"
         class="text-blue-600 hover:text-blue-700 underline underline-offset-2"
-        >查看{{ data.source }}原始牌告 →</a
+        >查看原始開放資料 →</a
       >
     </p>
   </section>
