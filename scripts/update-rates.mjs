@@ -80,8 +80,15 @@ async function fetchHtml(url) {
   const res = await fetch(url, {
     headers: { 'User-Agent': UA, 'Accept-Language': 'zh-TW' },
   })
+  const html = await res.text()
+  // 診斷：印出實際回應狀態與原始內容前 800 字（判斷是否被擋頁/導向/JS 牆）
+  console.log(
+    `[diag] GET ${url} → status=${res.status} finalUrl=${res.url} ` +
+      `type=${res.headers.get('content-type')} len=${html.length}`,
+  )
+  console.log(`[diag] 原始內容前 800 字：\n${html.slice(0, 800)}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return res.text()
+  return html
 }
 
 async function main() {
