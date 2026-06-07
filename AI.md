@@ -90,17 +90,30 @@ server/api/__sitemap__/urls.ts  動態產生 sitemap 來源
 - ✅ Sitemap、robots.txt、GA4、Search Console 驗證
 - ✅ FAQ 頁 + FAQPage JSON-LD 結構化資料（`pages/faq.vue:14-35`）
 - ✅ 36 篇知識庫文章（`content/blog/`）
+- ✅ 攤還明細 **CSV 匯出 + 列印/存 PDF**（`utils/export.ts`、`components/ExportActions.vue`、`@media print`）
+- ✅ **關於 / 專業聲明頁**（`pages/about.vue`，含 AboutPage/Organization JSON-LD）
+- ✅ 滑桿 **+/− 微調鈕**（`components/RangeInput.vue`）
+- ✅ **台銀參考利率自動同步架構**（見第 6 節，cron 爬蟲 + `data/rates.json` + `components/RateReference.vue`）
 
-## 6. 尚未實作（真正可做的待辦）
+## 6. 利率自動同步（架構已建，待首跑驗證）
 
-- ❌ **即時利率 API**：利率為使用者自行輸入（無寫死的市場利率、也無外部 API）。
-  受限於 SSG 無後端，且台灣銀行房貸利率無公開免費可跨域的 API——動工前須先確認資料源。
-- ❌ **PDF / Excel 匯出攤還表**：未安裝 jsPDF / SheetJS。注意中文字型嵌入成本。
-- ❌ **獨立的「關於 / 專業聲明」頁（E-E-A-T）**：目前免責聲明僅在首頁頁尾，無專屬頁。
-- ❌ **滑桿 +/− 微調鈕**：`RangeInput.vue` 只有滑桿 + 數字框。
+- 資料檔：`data/rates.json`（`auto: false` 表尚未經爬蟲驗證、為播種參考值）。
+- 爬蟲：`scripts/update-rates.mjs`（Node 內建 fetch，**故障安全**：解析失敗不覆蓋、不讓 CI 失敗）。
+- 排程：`.github/workflows/update-rates.yml`（每週 cron + `workflow_dispatch`，有變動才 commit 回 `main` → 觸發 Pages 重新部署）。
+- 顯示：`components/RateReference.vue`（首頁「市場參考利率」區塊）。
+- ⚠️ **沙箱連不到台銀（host allowlist），爬蟲選擇器尚未經真實 HTML 驗證**。
+  請到 GitHub Actions 手動 `workflow_dispatch` 跑一次 `Update reference rates`，
+  依 log 調整 `parseBaseLendingRate()`。成功後 `data/rates.json` 的 `auto` 會變 `true`。
+
+## 7. 仍未實作（真正可做的待辦）
+
 - ⚠️ **持久化僅 localStorage**，無 IndexedDB、無「多組歷史紀錄」清單（僅保存當前表單狀態）。
+  評估：與既有的分享連結 + A/B PK 高度重疊，需求待確認再做。
+- 🔧 **參考利率「一鍵套用」到試算欄位**：目前 `RateReference` 為唯讀顯示。
+  套用到哪個方案/哪一階段是產品決策，待確認。
+- 🔧 **擴充爬蟲來源**：目前僅解析台銀基準放款利率；定儲指數、央行重貼現率仍為播種值。
 
-## 7. 重要陷阱（務必先讀）
+## 8. 重要陷阱（務必先讀）
 
 - 🔥 **PWA 舊快取會餵舊版**：曾發生 Service Worker 預快取舊 HTML/JS，導致使用者
   看到的是好幾版之前的內容（commit `651ce45`）。**「線上實測」前務必硬重整或
@@ -111,7 +124,7 @@ server/api/__sitemap__/urls.ts  動態產生 sitemap 來源
 - 部署只認 `main`。功能合進 `main` 才會上線。
 - `config/` 會被自動 import（`nuxt.config.ts` `imports.dirs`），新增檔案注意命名衝突。
 
-## 8. 常用指令
+## 9. 常用指令
 
 ```bash
 npm install      # 安裝（postinstall 會跑 nuxt prepare）
@@ -121,7 +134,7 @@ npm run preview  # 預覽
 npm run typecheck
 ```
 
-## 9. 給 AI 代理人的工作原則
+## 10. 給 AI 代理人的工作原則
 
 1. **先對照本檔再批評/動工**，別對著舊 README 或被快取的線上版開藥方。
 2. 改計算邏輯 → 動 `utils/*.ts` 與對應 `types/*.ts`，UI 在 `components/`。
