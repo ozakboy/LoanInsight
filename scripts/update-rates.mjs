@@ -62,6 +62,7 @@ function parseBaseLendingRate(text) {
 function logDiagnostics(url, html, text) {
   console.log(`[diag] 來源 ${url}`)
   console.log(`[diag] HTML 長度 ${html.length}、純文字長度 ${text.length}`)
+  console.log(`[diag] 原始內容前 800 字：\n${html.slice(0, 800)}`)
   for (const kw of ['基準放款利率', '基準利率', '放款', '定儲', '利率指數', '％', '%']) {
     const idx = text.indexOf(kw)
     if (idx >= 0) {
@@ -71,9 +72,17 @@ function logDiagnostics(url, html, text) {
       console.log(`[diag] 未命中「${kw}」`)
     }
   }
-  // 印出文字中所有「x.xxx」形式的數字（前 20 個），協助判斷數值位置
   const nums = text.match(/\d{1,2}\.\d{1,3}/g)
   console.log(`[diag] 偵測到的小數（前 20）：${(nums || []).slice(0, 20).join(', ')}`)
+}
+
+/** 判斷回應是否為台銀「系統維護公告」導向頁（此時不應視為解析錯誤） */
+function isMaintenance(finalUrl, html) {
+  return (
+    /enotice\.bot\.com\.tw/i.test(finalUrl) ||
+    html.includes('系統維護') ||
+    html.includes('維護作業中')
+  )
 }
 
 async function fetchHtml(url) {
@@ -81,14 +90,11 @@ async function fetchHtml(url) {
     headers: { 'User-Agent': UA, 'Accept-Language': 'zh-TW' },
   })
   const html = await res.text()
-  // 診斷：印出實際回應狀態與原始內容前 800 字（判斷是否被擋頁/導向/JS 牆）
   console.log(
-    `[diag] GET ${url} → status=${res.status} finalUrl=${res.url} ` +
-      `type=${res.headers.get('content-type')} len=${html.length}`,
+    `[update-rates] GET ${url} → status=${res.status} finalUrl=${res.url} len=${html.length}`,
   )
-  console.log(`[diag] 原始內容前 800 字：\n${html.slice(0, 800)}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return html
+  return { html, finalUrl: res.url }
 }
 
 async function main() {
@@ -96,13 +102,20 @@ async function main() {
 
   let parsed = null
   let usedUrl = null
+  let maintenance = false
 
   for (const url of SOURCES) {
-    let html
+    let html, finalUrl
     try {
-      html = await fetchHtml(url)
+      ;({ html, finalUrl } = await fetchHtml(url))
     } catch (err) {
       console.warn(`[update-rates] 取得 ${url} 失敗：${err.message}`)
+      continue
+    }
+    // 台銀系統維護中 → 導向 enotice 維護公告頁，此時所有人都拿不到利率，非程式錯誤
+    if (isMaintenance(finalUrl, html)) {
+      console.warn(`[update-rates] 台銀系統維護中（導向 ${finalUrl}），保留現有資料`)
+      maintenance = true
       continue
     }
     const text = toText(html)
@@ -112,12 +125,16 @@ async function main() {
       usedUrl = url
       break
     }
-    // 此來源解析不到 → 印診斷後試下一個
+    // 此來源解析不到（且非維護）→ 印診斷後試下一個
     logDiagnostics(url, html, text)
   }
 
   if (!parsed) {
-    console.warn('[update-rates] 所有來源都解析不到基準放款利率，保留現有資料（見上方 [diag]）')
+    if (maintenance) {
+      console.warn('[update-rates] 因台銀維護而略過本次更新，待維護結束後自動重試')
+    } else {
+      console.warn('[update-rates] 所有來源都解析不到基準放款利率，保留現有資料（見上方 [diag]）')
+    }
     return // fail-safe
   }
 
