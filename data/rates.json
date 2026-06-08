@@ -1,6 +1,6 @@
 {
-  "updated": "2026-06-07",
-  "auto": false,
+  "updated": "2026-06-08",
+  "auto": true,
   "attribution": "中央銀行 · 政府資料開放平臺",
   "sourceUrl": "https://data.gov.tw/dataset/10359",
   "note": "以下為五大銀行平均牌告利率，非個人實際核貸利率；實際利率因個人信用、職業與擔保品而異。",
@@ -8,23 +8,23 @@
     {
       "key": "index_mortgage",
       "label": "五大銀行 指數型房貸利率（機動）",
-      "value": 1.74,
+      "value": 1.72,
       "unit": "%",
-      "period": ""
+      "period": "民國115年05月"
     },
     {
       "key": "base_lending",
       "label": "五大銀行 基準放款利率（機動）",
-      "value": 3.35,
+      "value": 3.32,
       "unit": "%",
-      "period": ""
+      "period": "民國115年05月"
     },
     {
       "key": "deposit_index_2y",
       "label": "定儲利率指數（2 年機動）",
-      "value": 1.76,
+      "value": 1.74,
       "unit": "%",
-      "period": ""
+      "period": "民國115年05月"
     }
   ]
 }
