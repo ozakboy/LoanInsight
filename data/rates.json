@@ -8,23 +8,23 @@
     {
       "key": "index_mortgage",
       "label": "五大銀行 指數型房貸利率（機動）",
-      "value": 1.72,
+      "value": 1.734,
       "unit": "%",
-      "period": "民國115年05月"
+      "period": "民國114年11月"
     },
     {
       "key": "base_lending",
       "label": "五大銀行 基準放款利率（機動）",
-      "value": 3.32,
+      "value": 3.265,
       "unit": "%",
-      "period": "民國115年05月"
+      "period": "民國114年11月"
     },
     {
       "key": "deposit_index_2y",
       "label": "定儲利率指數（2 年機動）",
-      "value": 1.74,
+      "value": 1.775,
       "unit": "%",
-      "period": "民國115年05月"
+      "period": "民國114年11月"
     }
   ]
 }
