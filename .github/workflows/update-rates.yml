@@ -36,7 +36,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add data/rates.json
-            git commit -m "chore(rates): 自動更新台銀參考利率"
+            git commit -m "chore(rates): 自動更新市場參考利率（五大銀行平均）"
             git push origin main
           else
             echo "利率無變動，略過提交"
