@@ -3,26 +3,26 @@
   "auto": false,
   "attribution": "中央銀行 · 政府資料開放平臺",
   "sourceUrl": "https://data.gov.tw/dataset/10359",
-  "note": "以下為市場參考指標，非個人實際核貸利率；實際利率因個人信用、職業與擔保品而異。",
+  "note": "以下為五大銀行平均牌告利率，非個人實際核貸利率；實際利率因個人信用、職業與擔保品而異。",
   "rates": [
     {
-      "key": "mortgage_avg",
-      "label": "五大銀行新承做購屋貸款平均利率",
-      "value": 2.31,
+      "key": "index_mortgage",
+      "label": "五大銀行 指數型房貸利率（機動）",
+      "value": 1.74,
       "unit": "%",
       "period": ""
     },
     {
-      "key": "five_bank_lending_avg",
-      "label": "五大銀行新承做放款加權平均利率",
-      "value": 2.119,
+      "key": "base_lending",
+      "label": "五大銀行 基準放款利率（機動）",
+      "value": 3.35,
       "unit": "%",
       "period": ""
     },
     {
-      "key": "cbc_rediscount",
-      "label": "中央銀行 重貼現率",
-      "value": 2.0,
+      "key": "deposit_index_2y",
+      "label": "定儲利率指數（2 年機動）",
+      "value": 1.76,
       "unit": "%",
       "period": ""
     }
