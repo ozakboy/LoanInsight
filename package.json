@@ -1,7 +1,7 @@
 {
   "name": "loaninsight",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "LoanInsight 智貸見解 — 現代化貸款試算與財務診斷工具（Nuxt 3 SSG）",
   "scripts": {
     "dev": "nuxt dev",
