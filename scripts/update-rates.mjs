@@ -136,10 +136,33 @@ async function fetchGovRates() {
     return null
   }
 
-  // 最新月份 + 該月所有（五大銀行）列
-  const latest = rows.reduce((mx, r) => Math.max(mx, num(r[ymIdx]) || -1), -1)
-  const latestRows = rows.filter((r) => num(r[ymIdx]) === latest)
-  console.log(`[update-rates] 最新年月 ${latest}（${latestRows.length} 家銀行）`)
+  // 依年月分組，挑「資料完整（五家到齊）的最新月」——避免最新月僅 1 家造成偏差
+  const byMonth = new Map()
+  for (const r of rows) {
+    const ym = num(r[ymIdx])
+    if (!Number.isFinite(ym)) continue
+    if (!byMonth.has(ym)) byMonth.set(ym, [])
+    byMonth.get(ym).push(r)
+  }
+  const months = [...byMonth.keys()].sort((a, b) => a - b)
+  if (months.length === 0) {
+    console.log('[diag] 沒有有效年月資料')
+    return null
+  }
+  const FULL = 5 // 五大銀行
+  let pool = months.filter((m) => byMonth.get(m).length >= FULL)
+  if (pool.length === 0) {
+    const maxCount = Math.max(...months.map((m) => byMonth.get(m).length))
+    pool = months.filter((m) => byMonth.get(m).length === maxCount)
+  }
+  const chosen = pool[pool.length - 1]
+  const newest = months[months.length - 1]
+  const latestRows = byMonth.get(chosen)
+  console.log(
+    `[update-rates] 採用年月 ${chosen}（${latestRows.length} 家銀行）；` +
+      `最新月 ${newest} 僅 ${byMonth.get(newest).length} 家，故` +
+      (chosen === newest ? '直接採用' : '改採較完整的前一完整月'),
+  )
 
   const avgOf = (colName) => {
     const idx = header.findIndex((h) => h === colName)
@@ -151,7 +174,7 @@ async function fetchGovRates() {
     return vals.length ? round3(vals.reduce((a, b) => a + b, 0) / vals.length) : null
   }
 
-  const out = { period: rocPeriod(latest), values: {} }
+  const out = { period: rocPeriod(chosen), values: {} }
   for (const [key, col] of Object.entries(COLUMN_MAP)) {
     const v = avgOf(col)
     if (v != null) out.values[key] = v
